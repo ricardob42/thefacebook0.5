@@ -101,6 +101,10 @@
                     <div class="flex space-x-2 w-full justify-center">
                         <button id="export-btn" class="text-sm text-green-400 hover:text-green-300 px-3 py-1 bg-gray-700 rounded">Export Data</button>
                         <button id="import-btn" class="text-sm text-purple-400 hover:text-purple-300 px-3 py-1 bg-gray-700 rounded">Import Data</button>
+                        <label class="custom-file-upload mt-2">
+  <input type="file" id="json-file-import" accept=".json">
+  <span class="flex items-center justify-center"><span class="mr-1">📁</span> Importar desde archivo</span>
+</label>
                     </div>
                 </div>
             </div>
@@ -752,6 +756,34 @@
                 if (parsedData.userProfile && parsedData.posts) {
                     userProfile = parsedData.userProfile;
                     posts = parsedData.posts;
+
+              <script>
+document.getElementById('json-file-import').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsedData = JSON.parse(e.target.result);
+
+      if (parsedData.userProfile && parsedData.posts) {
+        userProfile = parsedData.userProfile;
+        posts = parsedData.posts;
+
+        updateProfileDisplay();
+        renderPosts();
+        alert("Datos importados correctamente desde archivo.");
+      } else {
+        alert("Formato de datos incorrecto.");
+      }
+    } catch (err) {
+      alert("Error leyendo el archivo: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+</script>
                     
                     // Update UI
                     updateProfileDisplay();
